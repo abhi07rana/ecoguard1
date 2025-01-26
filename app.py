@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler
+from io import StringIO  # Correct import for StringIO
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -35,7 +36,7 @@ def upload_and_predict():
     try:
         # Read the CSV file
         file_contents = file.stream.read().decode('utf-8')
-        df = pd.read_csv(pd.compat.StringIO(file_contents))
+        df = pd.read_csv(StringIO(file_contents))  # Correctly using StringIO to read the CSV from string
 
         # Check if necessary columns are present
         required_columns = ['pollution_level', 'air_quality_index', 'temperature', 'humidity']
