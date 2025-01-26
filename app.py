@@ -4,11 +4,14 @@ import pandas as pd
 import numpy as np
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler
-from io import StringIO  # Correct import for StringIO
+import logging
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all domains
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Load the trained Keras model
 model_path = 'ecoguard_model.keras'
@@ -42,6 +45,9 @@ def upload_and_predict():
         # Extract only the required features (pollution_level and air_quality_index)
         data = df[['pollution_level', 'air_quality_index']].values
 
+        # Optionally, normalize data using StandardScaler (if needed)
+        data = scaler.fit_transform(data)
+
         # Reshape data to match the model's expected input shape (None, 2, 1, 1)
         reshaped_data = data.reshape((-1, 2, 1, 1))  # Reshape to (batch_size, 2, 1, 1)
 
@@ -59,6 +65,7 @@ def upload_and_predict():
         return jsonify({'predicted_class': result, 'confidence': float(np.max(prediction))})
 
     except Exception as e:
+        logging.error(f"Error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
