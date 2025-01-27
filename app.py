@@ -70,7 +70,7 @@ def upload_and_predict():
         return jsonify({
             'predicted_class': result, 
             'confidence': confidence,  # Confidence as percentage
-            'raw_prediction': prediction.tolist()  # Returning raw prediction for debugging
+            
         })
 
     except Exception as e:
