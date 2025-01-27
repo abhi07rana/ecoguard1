@@ -1,0 +1,4 @@
+pollution_level,air_quality_index,temperature,humidity
+120,50,30,80
+110,45,28,75
+150,60,32,85
